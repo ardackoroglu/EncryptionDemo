@@ -8,8 +8,14 @@ export const enc = async (message, publicKey) => {
     const aesKey = await Aes.randomKey(32); // 256-bit key
     const iv = await Aes.randomKey(16);     // 128-bit IV
 
+    console.log('Generated AES key during encryption:\n', aesKey);
+    console.log('Generated IV during encryption:\n', iv);
+    
+
     // Step 2: Encrypt the message using AES
     const encryptedMessage = await Aes.encrypt(message, aesKey, iv, 'aes-256-cbc');
+
+    console.log('Encrypted message in Base64:\n', encryptedMessage);
 
     // Step 3: Encrypt AES key using RSA public key
     const encryptedAesKey = await RSA.encrypt(aesKey, publicKey);

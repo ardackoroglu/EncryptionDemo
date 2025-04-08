@@ -72,7 +72,6 @@ const App = () => {
     console.log('Encrypting message:', messageToEncrypt);
     // const encrypted = await RSA.encrypt(messageToEncrypt, publicKey);
     const encrypted = await enc(messageToEncrypt, publicKey);
-    console.log('Encrypted Message:', encrypted);
     setEncryptedMessage(encrypted);
     setMessageToDecrypt(encrypted);
   };
@@ -85,7 +84,6 @@ const App = () => {
     console.log('Decrypting message...');
     const decrypted = await dec(messageToDecrypt, privateKey);
     // const decrypted = await RSA.decrypt(messageToDecrypt, privateKey);
-    console.log('Decrypted Message:', decrypted);
     setDecryptedMessage(decrypted);
   };
 
