@@ -24,23 +24,25 @@ export const dec = async (encryptedPrescription, privateKey) => {
 
     console.log('Encrypted AES key:', encryptedAesKey);
 
-    try {
-        const decryptedAesKeyBase64 = await RSA.decrypt(encryptedAesKey, privateKey);
-        const decryptedAesKey = Buffer.from(decryptedAesKeyBase64, 'base64');
+    const decryptedAesKeyHex = await RSA.decrypt(encryptedAesKey, privateKey);
+    console.log('Decrypted AES key:', decryptedAesKeyHex);
+    
+    const decryptedAesKeyBase64 = Buffer.from(decryptedAesKeyHex, 'hex').toString('base64');
+    console.log('Decrypted AES key in Base64:', decryptedAesKeyBase64);
+    
 
-        const decryptedMessageBase64 = await Aes.decrypt(
-            encryptedMessage.toString('base64'),
-            decryptedAesKey.toString('base64'),
-            aesIv,
-            'aes-256-cbc'
-        );
+    const decryptedMessageBase64 = await Aes.decrypt(
+        encryptedMessage.toString('base64'),
+        decryptedAesKeyBase64,
+        aesIv,
+        'aes-256-cbc'
+    );
 
-        const decryptedPrescription = Buffer.from(decryptedMessageBase64, 'base64').toString('utf8');
-        console.log('Decrypted prescription:', decryptedPrescription);
+    console.log('Decrypted message in Base64:', decryptedMessageBase64);
+    
 
-        return decryptedPrescription;
-    } catch (error) {
-        console.error('Encryption failed:', error);
-        return "\n\n\n\nyok olmadi";
-    }
+    const decryptedPrescription = Buffer.from(decryptedMessageBase64, 'base64').toString('utf8');
+    console.log('Decrypted prescription:', decryptedPrescription);
+
+    return decryptedPrescription;
 }
